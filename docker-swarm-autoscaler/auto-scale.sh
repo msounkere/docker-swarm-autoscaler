@@ -6,7 +6,7 @@ CPU_PERCENTAGE_LOWER_LIMIT=25
 PROMETHEUS_API="api/v1/query?query="
 PROMETHEUS_QUERY="sum(rate(container_cpu_usage_seconds_total%7Bcontainer_label_com_docker_swarm_task_name%3D~%27.%2B%27%7D%5B5m%5D))BY(container_label_com_docker_swarm_service_name%2Cinstance)*100"
 
-SERVICE_TO_MONITOR = "Apps_identity"
+SERVICE_TO_MONITOR="Apps_identity"
 
 get_high_cpu_services () {
   local prometheus_results="${1}"
