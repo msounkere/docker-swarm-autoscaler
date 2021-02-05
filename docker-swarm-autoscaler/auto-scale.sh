@@ -6,30 +6,38 @@ CPU_PERCENTAGE_LOWER_LIMIT=25
 PROMETHEUS_API="api/v1/query?query="
 PROMETHEUS_QUERY="sum(rate(container_cpu_usage_seconds_total%7Bcontainer_label_com_docker_swarm_task_name%3D~%27.%2B%27%7D%5B5m%5D))BY(container_label_com_docker_swarm_service_name%2Cinstance)*100"
 
+SERVICE_TO_MONITOR = "Apps_identity"
+
 get_high_cpu_services () {
   local prometheus_results="${1}"
   local services=""
-  for service in $(printf "%s$prometheus_results" | jq ".data.result[] | select( all(.value[1]|tonumber; . > $CPU_PERCENTAGE_UPPER_LIMIT) ) | .metric.container_label_com_docker_swarm_service_name" | sed 's/"//g' | sort | uniq); do
-    services="$services $service"
-  done
+#   for service in $(printf "%s$prometheus_results" | jq ".data.result[] | select( all(.value[1]|tonumber; . > $CPU_PERCENTAGE_UPPER_LIMIT) ) | .metric.container_label_com_docker_swarm_service_name" | sed 's/"//g' | sort | uniq); do
+#     services="$services $service"
+#   done
+  service = $SERVICE_TO_MONITOR
+  services="$services $service"
   echo $services
 }
 
 get_all_services () {
   local prometheus_results="${1}"
   local services=""
-  for service in $(printf "%s$prometheus_results" | jq ".data.result[].metric.container_label_com_docker_swarm_service_name" | sed 's/"//g' | sort | uniq); do
-    services="$services $service"
-  done
+#   for service in $(printf "%s$prometheus_results" | jq ".data.result[].metric.container_label_com_docker_swarm_service_name" | sed 's/"//g' | sort | uniq); do
+#     services="$services $service"
+#   done
+  service = $SERVICE_TO_MONITOR
+  services="$services $service"
   echo $services
 }
 
 get_low_cpu_services () {
   local prometheus_results="${1}"
   local services=""
-  for service in $(printf "%s$prometheus_results" | jq ".data.result[] | select( all(.value[1]|tonumber; . < $CPU_PERCENTAGE_LOWER_LIMIT) ) | .metric.container_label_com_docker_swarm_service_name" | sed 's/"//g' | sort | uniq); do
-    services="$services $service"
-  done
+#   for service in $(printf "%s$prometheus_results" | jq ".data.result[] | select( all(.value[1]|tonumber; . < $CPU_PERCENTAGE_LOWER_LIMIT) ) | .metric.container_label_com_docker_swarm_service_name" | sed 's/"//g' | sort | uniq); do
+#     services="$services $service"
+#   done
+  service = $SERVICE_TO_MONITOR
+  services="$services $service"
   echo $services
 }
 
